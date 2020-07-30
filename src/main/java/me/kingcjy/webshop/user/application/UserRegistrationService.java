@@ -1,6 +1,7 @@
 package me.kingcjy.webshop.user.application;
 
 import lombok.RequiredArgsConstructor;
+import me.kingcjy.webshop.user.domain.MojangUser;
 import me.kingcjy.webshop.user.domain.User;
 import me.kingcjy.webshop.user.domain.UserDto;
 import me.kingcjy.webshop.user.domain.UserRepository;
@@ -18,9 +19,11 @@ public class UserRegistrationService {
 
     @Transactional
     public Long registration(UserDto.UserRegistration userRegistration) {
+//        TODO Mojang Api
         User user = new User(userRegistration.getEmail(),
                 userRegistration.getPassword(),
-                userRegistration.getUsername());
+                userRegistration.getUsername(),
+                new MojangUser(userRegistration.getEmail()));
 
         userRepository.save(user);
         return user.getId();

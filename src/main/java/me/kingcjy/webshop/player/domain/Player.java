@@ -35,7 +35,12 @@ public class Player {
     @ElementCollection
     @CollectionTable(name = "inventory_item", joinColumns = @JoinColumn(name = "player_id"))
     @OrderColumn(name = "inventory_item_id")
-    private List<InventoryItem> inventoryItems;
+    private List<InventoryItem> inventoryItems = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(name = "access_history", joinColumns = @JoinColumn(name = "player_id"))
+    @OrderColumn(name = "access_history_id")
+    private List<AccessHistory> accessHistories = new ArrayList<>();
 
     private LocalDateTime lastPlayedAt;
 
@@ -55,5 +60,9 @@ public class Player {
 
     public void updateLastPlayedAt() {
         this.lastPlayedAt = LocalDateTime.now();
+    }
+
+    public void addAccessHistory(AccessType accessType) {
+        this.accessHistories.add(new AccessHistory(accessType));
     }
 }

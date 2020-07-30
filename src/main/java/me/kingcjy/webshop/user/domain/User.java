@@ -31,13 +31,16 @@ public class User {
     @Embedded
     private MojangUser mojangUser;
 
-    private boolean emailCertified;
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    public User(String email, String password, String username) {
-        this(email, password, username, new MojangUser());
+    public User(String username, MojangUser mojangUser) {
+        this.username = username;
+        this.mojangUser = mojangUser;
+        this.userStatus = UserStatus.WAIT_REGISTRATION;
     }
 
     public User(String email, String password, String username, MojangUser mojangUser) {
@@ -45,6 +48,6 @@ public class User {
         this.password = new Password(password);
         this.username = username;
         this.mojangUser = mojangUser;
-        this.emailCertified = true;
+        this.userStatus = UserStatus.ACTIVE;
     }
 }

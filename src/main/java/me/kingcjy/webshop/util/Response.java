@@ -45,6 +45,10 @@ public class Response<T> {
         return getResponse(HttpStatus.CREATED, SUCCESS_MESSAGE, body);
     }
 
+    public static <T> Response<?> badRequest(String message) {
+        return getResponse(HttpStatus.BAD_REQUEST, message, null);
+    }
+
     public static <T> Response<T> success(T body) {
         return getResponse(HttpStatus.OK, SUCCESS_MESSAGE, body);
     }

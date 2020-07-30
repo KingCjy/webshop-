@@ -1,5 +1,9 @@
 package me.kingcjy.webshop.user.domain;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
@@ -7,26 +11,14 @@ import javax.persistence.Embeddable;
  * @author KingCjy
  */
 @Embeddable
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MojangUser {
 
-    @Column(name = "mojang_uuid")
+    @Column(name = "uuid")
     private String uuid;
 
-    @Column(name = "minecrft_name")
-    private String minecraftName;
-
-    public MojangUser() {}
-
-    public MojangUser(String uuid, String minecraftName) {
+    public MojangUser(String uuid) {
         this.uuid = uuid;
-        this.minecraftName = minecraftName;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public String getMinecraftName() {
-        return minecraftName;
     }
 }

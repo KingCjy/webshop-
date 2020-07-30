@@ -14,8 +14,19 @@ public class UserTest {
     private UserRepository userRepository;
 
     @Test
-    public void createUserTest() {
-        User user = new User("KingCjy@gmail.com", "password1234", "KingCjy");
+    public void createUserFromMojangUser() {
+        User user = new User("KingCjy", new MojangUser("KingCjy@gmail.com"));
+        userRepository.save(user);
+    }
+
+    @Test
+    public void createUserFromWeb() {
+        User user = new User(
+                "KingCjy@gmail.com",
+                "1234",
+                "KingCjy",
+                new MojangUser("KingCjy@gmail.com"));
+
         userRepository.save(user);
     }
 }
