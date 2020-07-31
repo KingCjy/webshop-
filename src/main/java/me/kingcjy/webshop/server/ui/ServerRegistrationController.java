@@ -2,8 +2,8 @@ package me.kingcjy.webshop.server.ui;
 
 import lombok.RequiredArgsConstructor;
 import me.kingcjy.webshop.common.model.ReturnId;
+import me.kingcjy.webshop.server.application.ServerDto;
 import me.kingcjy.webshop.server.application.ServerRegistrationService;
-import me.kingcjy.webshop.server.domain.ServerDto;
 import me.kingcjy.webshop.util.Response;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

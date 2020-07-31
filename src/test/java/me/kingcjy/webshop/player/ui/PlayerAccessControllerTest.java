@@ -2,8 +2,9 @@ package me.kingcjy.webshop.player.ui;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.kingcjy.webshop.player.application.PlayerAccessService;
-import me.kingcjy.webshop.player.domain.PlayerDto;
+import me.kingcjy.webshop.player.application.PlayerDto;
 import me.kingcjy.webshop.server.domain.ServerRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -33,12 +34,15 @@ class PlayerAccessControllerTest {
     @MockBean
     private ServerRepository serverRepository;
 
+    private String secretKey = "secret";
+
+    @BeforeEach
+    public void setUp() {
+        when(serverRepository.findServerIdBySecretKey(secretKey)).thenReturn(1L);
+    }
+
     @Test
     public void joinPlayerTest() throws Exception {
-        String secretKey = "secret";
-
-        when(serverRepository.findServerIdBySecretKey(secretKey)).thenReturn(1L);
-
         PlayerDto.PlayerAccess playerAccess = new PlayerDto.PlayerAccess("uuid", "hi", 0L);
         String content = objectMapper.writeValueAsString(playerAccess);
 
@@ -52,10 +56,6 @@ class PlayerAccessControllerTest {
 
     @Test
     public void exitPlayerTest() throws Exception {
-        String secretKey = "secret";
-
-        when(serverRepository.findServerIdBySecretKey(secretKey)).thenReturn(1L);
-
         PlayerDto.PlayerAccess playerAccess = new PlayerDto.PlayerAccess("uuid", "hi", 0L);
         String content = objectMapper.writeValueAsString(playerAccess);
 

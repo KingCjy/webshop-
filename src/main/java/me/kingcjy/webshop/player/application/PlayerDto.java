@@ -1,4 +1,4 @@
-package me.kingcjy.webshop.player.domain;
+package me.kingcjy.webshop.player.application;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

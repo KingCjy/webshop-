@@ -3,7 +3,6 @@ package me.kingcjy.webshop.player.application;
 import lombok.RequiredArgsConstructor;
 import me.kingcjy.webshop.player.domain.AccessType;
 import me.kingcjy.webshop.player.domain.Player;
-import me.kingcjy.webshop.player.domain.PlayerDto;
 import me.kingcjy.webshop.player.domain.PlayerRepository;
 import me.kingcjy.webshop.user.domain.MojangUser;
 import me.kingcjy.webshop.user.domain.User;

@@ -1,8 +1,11 @@
 package me.kingcjy.webshop.common.model;
 
+import lombok.Getter;
+
 /**
  * @author KingCjy
  */
+@Getter
 public class ReturnId {
     private Long id;
 

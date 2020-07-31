@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 /**
  * @author KingCjy
  */
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class SecretKeyGenerateServiceTest {
 
     @Autowired

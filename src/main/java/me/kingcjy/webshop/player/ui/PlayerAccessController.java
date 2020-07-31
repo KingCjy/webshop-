@@ -3,7 +3,7 @@ package me.kingcjy.webshop.player.ui;
 import lombok.RequiredArgsConstructor;
 import me.kingcjy.webshop.config.annotation.ServerId;
 import me.kingcjy.webshop.player.application.PlayerAccessService;
-import me.kingcjy.webshop.player.domain.PlayerDto;
+import me.kingcjy.webshop.player.application.PlayerDto;
 import me.kingcjy.webshop.util.Response;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
