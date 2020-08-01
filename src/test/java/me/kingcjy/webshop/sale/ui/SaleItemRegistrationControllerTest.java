@@ -36,7 +36,7 @@ class SaleItemRegistrationControllerTest extends ControllerTest {
 
     @Test
     public void registrationSaleItemTest() throws Exception {
-        SaleItemDto.SaleItemRequest saleItemRequest = new SaleItemDto.SaleItemRequest();
+        SaleItemDto.SaleItemRequest saleItemRequest = new SaleItemDto.SaleItemRequest("uuid", "name", "description", 1, 1, "item", "image");
         String content = objectMapper.writeValueAsString(saleItemRequest);
 
         mockMvc.perform(post("/plugin/api/v1/sale/plugin")

@@ -87,7 +87,7 @@ public class UserAcceptanceTest {
     }
 
     private ReturnId createServer(String token) {
-        ServerDto.ServerRegistration serverRegistration = new ServerDto.ServerRegistration("최재용서버", "12.20.1", "kingcjy.oa.to", -1, null);
+        ServerDto.ServerRegistration serverRegistration = new ServerDto.ServerRegistration("최재용서버", "12.20.1", "kingcjy.oa.to", 25565, null);
 
         EntityExchangeResult<Response<ReturnId>> response = client.post()
                 .uri("/api/v1/servers")
