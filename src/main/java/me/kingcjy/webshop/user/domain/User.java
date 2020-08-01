@@ -32,7 +32,7 @@ public class User {
     private MojangUser mojangUser;
 
     @Enumerated(EnumType.STRING)
-    private UserStatus userStatus;
+    private UserStatus status;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -40,7 +40,7 @@ public class User {
     public User(String username, MojangUser mojangUser) {
         this.username = username;
         this.mojangUser = mojangUser;
-        this.userStatus = UserStatus.WAIT_REGISTRATION;
+        this.status = UserStatus.WAIT_REGISTRATION;
     }
 
     public User(String email, String password, String username, MojangUser mojangUser) {
@@ -48,6 +48,13 @@ public class User {
         this.password = new Password(password);
         this.username = username;
         this.mojangUser = mojangUser;
-        this.userStatus = UserStatus.ACTIVE;
+        this.status = UserStatus.ACTIVE;
+    }
+
+    public void registration(String email, String password, String username) {
+        this.email = email;
+        this.password = new Password(password);
+        this.username = username;
+        this.status = UserStatus.ACTIVE;
     }
 }

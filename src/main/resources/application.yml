@@ -1,0 +1,9 @@
+
+
+webshop:
+  jwt:
+    auth-key: WEBSHOP_AUTH_KEY
+
+spring:
+  jpa:
+    show-sql: true

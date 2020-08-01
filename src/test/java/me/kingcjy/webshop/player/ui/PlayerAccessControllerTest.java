@@ -1,18 +1,13 @@
 package me.kingcjy.webshop.player.ui;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import me.kingcjy.webshop.config.ControllerTest;
 import me.kingcjy.webshop.player.application.PlayerAccessService;
 import me.kingcjy.webshop.player.application.PlayerDto;
-import me.kingcjy.webshop.server.domain.ServerRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -20,33 +15,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author KingCjy
  */
 @WebMvcTest(PlayerAccessController.class)
-class PlayerAccessControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
+class PlayerAccessControllerTest extends ControllerTest {
 
     @MockBean
     private PlayerAccessService playerAccessService;
-
-    @MockBean
-    private ServerRepository serverRepository;
-
-    private String secretKey = "secret";
-
-    @BeforeEach
-    public void setUp() {
-        when(serverRepository.findServerIdBySecretKey(secretKey)).thenReturn(1L);
-    }
 
     @Test
     public void joinPlayerTest() throws Exception {
         PlayerDto.PlayerAccess playerAccess = new PlayerDto.PlayerAccess("uuid", "hi", 0L);
         String content = objectMapper.writeValueAsString(playerAccess);
 
-        mockMvc.perform(post("/api/v1/players/join")
+        System.out.println(content);
+        mockMvc.perform(post("/plugin/api/v1/players/join")
                 .header("X-Server-Key", secretKey)
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -59,7 +39,7 @@ class PlayerAccessControllerTest {
         PlayerDto.PlayerAccess playerAccess = new PlayerDto.PlayerAccess("uuid", "hi", 0L);
         String content = objectMapper.writeValueAsString(playerAccess);
 
-        mockMvc.perform(post("/api/v1/players/exit")
+        mockMvc.perform(post("/plugin/api/v1/players/exit")
                 .header("X-Server-Key", secretKey)
                 .content(content)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)

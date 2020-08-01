@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  */
 public class UserRepositoryImpl extends QuerydslRepositorySupport implements UserRepositoryQuerydsl {
 
-    private QUser user;
+    private QUser user = QUser.user;
 
     public UserRepositoryImpl() {
         super(User.class);

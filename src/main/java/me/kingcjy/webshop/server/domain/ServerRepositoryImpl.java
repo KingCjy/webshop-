@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  */
 public class ServerRepositoryImpl extends QuerydslRepositorySupport implements ServerRepositoryQuerydsl {
 
-    private QServer server;
+    private QServer server = QServer.server;
 
     public ServerRepositoryImpl() {
         super(Server.class);
