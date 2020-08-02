@@ -3,6 +3,7 @@ package me.kingcjy.webshop.atdd;
 import me.kingcjy.webshop.common.model.ReturnId;
 import me.kingcjy.webshop.player.application.PlayerDto;
 import me.kingcjy.webshop.server.application.ServerDto;
+import me.kingcjy.webshop.server.domain.SecretKey;
 import me.kingcjy.webshop.user.domain.UserDto;
 import me.kingcjy.webshop.util.Response;
 import org.junit.jupiter.api.DisplayName;
@@ -33,29 +34,15 @@ public class UserAcceptanceTest {
         String username = "KingCjy";
         String uuid = "82532435-c58e-4917-adba-6f45e88546f0";
 
+        String uuid2 = "82532435-c58e-4917-adba-6f45e88546f1";
+        String username2 = "Player1";
+
         ReturnId userId = userWebSignUp(email, password, username);
         UserDto.UserToken userToken = userLogin(email, password);
         ReturnId serverId = createServer(userToken.getToken());
+        String secretKey = getServerSecretKey(userToken.getToken(), serverId.getId());
 
-//        PlayerDto.PlayerAccess playerAccess = new PlayerDto.PlayerAccess(uuid, username, null);
-//
-//        EntityExchangeResult<Response<ReturnId>> response = client.post()
-//                .uri("/api/v1/players/join")
-//                .body(Mono.just(playerAccess), PlayerDto.PlayerAccess.class)
-//                .exchange()
-//                .expectStatus().isCreated()
-//                .expectBody(new ParameterizedTypeReference<Response<ReturnId>>() {})
-//                .returnResult();
-//
-//
-//        UserDto.UserRegistration userRegistration = new UserDto.UserRegistration("tlssycks@hanmail.net", "Zxcv720003!@#", username);
-//        client.post()
-//                .uri("/api/v1/users")
-//                .body(Mono.just(userRegistration), UserDto.UserRegistration.class)
-//                .exchange()
-//                .expectStatus().isCreated()
-//                .expectBody()
-//                .returnResult();
+        accessServer(secretKey, uuid2, username2);
     }
 
     private ReturnId userWebSignUp(String email, String password, String username) {
@@ -87,7 +74,7 @@ public class UserAcceptanceTest {
     }
 
     private ReturnId createServer(String token) {
-        ServerDto.ServerRegistration serverRegistration = new ServerDto.ServerRegistration("최재용서버", "12.20.1", "kingcjy.oa.to", 25565, null);
+        ServerDto.ServerRegistration serverRegistration = new ServerDto.ServerRegistration("KingCjy Server", "12.20.1", "kingcjy.oa.to", 25565, null);
 
         EntityExchangeResult<Response<ReturnId>> response = client.post()
                 .uri("/api/v1/servers")
@@ -99,5 +86,29 @@ public class UserAcceptanceTest {
                 .returnResult();
 
         return response.getResponseBody().getBody();
+    }
+
+    private String getServerSecretKey(String userToken, Long serverId) {
+        EntityExchangeResult<Response<ServerDto.ServerDetailResponse>> response = client.get()
+                .uri("/api/v1/servers/{id}", serverId)
+                .header("X-Auth-Token", userToken)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<Response<ServerDto.ServerDetailResponse>>() {})
+                .returnResult();
+
+        return response.getResponseBody().getBody().getSecretKey();
+    }
+
+    private void accessServer(String secretKey, String uuid2, String username2) {
+        PlayerDto.PlayerAccess playerAccess = new PlayerDto.PlayerAccess(uuid2, username2, null);
+        client.post()
+                .uri("/plugin/api/v1/players/join")
+                .header("X-Server-Key", secretKey)
+                .body(Mono.just(playerAccess), PlayerDto.PlayerAccess.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .returnResult();
     }
 }

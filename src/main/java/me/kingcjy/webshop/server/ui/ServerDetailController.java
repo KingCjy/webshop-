@@ -1,6 +1,7 @@
 package me.kingcjy.webshop.server.ui;
 
 import lombok.RequiredArgsConstructor;
+import me.kingcjy.webshop.common.security.SecurityUser;
 import me.kingcjy.webshop.server.application.ServerDetailService;
 import me.kingcjy.webshop.server.application.ServerDto;
 import me.kingcjy.webshop.util.Response;
@@ -21,9 +22,10 @@ public class ServerDetailController {
     private final ServerDetailService serverDetailService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getServerDetail(@PathVariable Long serverId) {
-        Long userId = 1L;
-        ServerDto.ServerDetailResponse serverDetail = serverDetailService.getServerDetail(serverId, userId);
+    public ResponseEntity<?> getServerDetail(
+            SecurityUser securityUser,
+            @PathVariable(name = "id") Long serverId) {
+        ServerDto.ServerDetailResponse serverDetail = serverDetailService.getServerDetail(serverId, securityUser.getUserId());
         return Response.success(serverDetail);
     }
 }

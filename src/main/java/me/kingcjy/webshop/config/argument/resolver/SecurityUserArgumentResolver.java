@@ -14,7 +14,6 @@ import org.springframework.web.method.support.ModelAndViewContainer;
  */
 @Component
 public class SecurityUserArgumentResolver implements HandlerMethodArgumentResolver {
-    private static final String X_SERVER_KEY = "X-Server-Key";
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
