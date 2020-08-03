@@ -44,7 +44,7 @@ public class PlayerAccessService {
         Player player = playerRepository.findByServerIdAndUuid(playerAccess.getServerId(), playerAccess.getUuid());
 
         if(player == null) {
-            player = new Player(user.getId(), playerAccess.getServerId());
+            player = new Player(user.getId(), playerAccess.getServerId(), playerAccess.getUuid());
         }
 
         return playerRepository.save(player);

@@ -47,13 +47,14 @@ public class Player {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    public Player(Long userId, Long serverId) {
-        this(userId, serverId, new Money(0), new ArrayList<>());
+    public Player(Long userId, Long serverId, String uuid) {
+        this(userId, serverId, uuid, new Money(0), new ArrayList<>());
     }
 
-    public Player(Long userId, Long serverId, Money money, List<InventoryItem> inventoryItems) {
+    public Player(Long userId, Long serverId, String uuid, Money money, List<InventoryItem> inventoryItems) {
         this.userId = userId;
         this.serverId = serverId;
+        this.uuid = uuid;
         this.money = money;
         this.inventoryItems = inventoryItems;
     }
@@ -64,5 +65,9 @@ public class Player {
 
     public void addAccessHistory(AccessType accessType) {
         this.accessHistories.add(new AccessHistory(accessType));
+    }
+
+    public void updateMoney(Money money) {
+        this.money = money;
     }
 }

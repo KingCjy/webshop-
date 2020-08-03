@@ -20,7 +20,7 @@ public class SaleItemRegistrationService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long registration(SaleItemDto.SaleItemRequest saleItemRequest) {
+    public Long registrationInPlugin(SaleItemDto.SaleItemRequest saleItemRequest) {
         Long sellerId = userRepository.findUserIdFromUUID(saleItemRequest.getUuid());
 
         SaleItem saleItem = new SaleItem(
@@ -31,5 +31,10 @@ public class SaleItemRegistrationService {
 
         saleItemRepository.save(saleItem);
         return saleItem.getId();
+    }
+
+    public Long registrationInWeb(SaleItemDto.SaleItemRequest saleItemRequest) {
+//        TODO
+        return 1L;
     }
 }

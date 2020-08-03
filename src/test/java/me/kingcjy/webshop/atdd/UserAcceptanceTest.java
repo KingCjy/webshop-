@@ -2,8 +2,8 @@ package me.kingcjy.webshop.atdd;
 
 import me.kingcjy.webshop.common.model.ReturnId;
 import me.kingcjy.webshop.player.application.PlayerDto;
+import me.kingcjy.webshop.sale.application.SaleItemDto;
 import me.kingcjy.webshop.server.application.ServerDto;
-import me.kingcjy.webshop.server.domain.SecretKey;
 import me.kingcjy.webshop.user.domain.UserDto;
 import me.kingcjy.webshop.util.Response;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
@@ -29,13 +28,19 @@ public class UserAcceptanceTest {
     @DisplayName("웹 회원가입 -> 서버 생성 -> 플레이어 서버접속 -> 플레이어 웹으로 정보입력")
     public void playerRegistrationTest() {
 
+//        Server Admin
         String email = "tlssycks@hanmail.net";
         String password = "Zxcv720003!@#";
         String username = "KingCjy";
         String uuid = "82532435-c58e-4917-adba-6f45e88546f0";
 
+//        Seller
         String uuid2 = "82532435-c58e-4917-adba-6f45e88546f1";
-        String username2 = "Player1";
+        String username2 = "Seller";
+
+//        Buyer
+        String uuid3 = "82532435-c58e-4917-adba-6f45e88546f1";
+        String username3 = "Buyer";
 
         ReturnId userId = userWebSignUp(email, password, username);
         UserDto.UserToken userToken = userLogin(email, password);
@@ -43,6 +48,9 @@ public class UserAcceptanceTest {
         String secretKey = getServerSecretKey(userToken.getToken(), serverId.getId());
 
         accessServer(secretKey, uuid2, username2);
+        ReturnId sellingItemId = sellingItem(uuid2, username);
+
+
     }
 
     private ReturnId userWebSignUp(String email, String password, String username) {
@@ -110,5 +118,20 @@ public class UserAcceptanceTest {
                 .expectStatus().isOk()
                 .expectBody()
                 .returnResult();
+    }
+
+    private ReturnId sellingItem(String secretKey, String uuid2) {
+        SaleItemDto.SaleItemRequest saleItemRequest = new SaleItemDto.SaleItemRequest(uuid2, "집행검", "짱짱쎈 집행검이다", 10, 100000, "asdjkasdad", "http://naver.com");
+
+        EntityExchangeResult<Response<ReturnId>> response = client.post()
+                .uri("/plugin/api/v1/sale")
+                .header("X-ServerKey", secretKey)
+                .body(Mono.just(saleItemRequest), SaleItemDto.SaleItemRequest.class)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<Response<ReturnId>>() {})
+                .returnResult();
+
+        return response.getResponseBody().getBody();
     }
 }

@@ -47,7 +47,7 @@ class SaleItemRegistrationServiceTest {
         String image = "http://naver.com";
 
         SaleItemDto.SaleItemRequest saleItemRequest = new SaleItemDto.SaleItemRequest(uuid, name, description, quantity, price, item, image);
-        Long saleItemId = saleItemRegistrationService.registration(saleItemRequest);
+        Long saleItemId = saleItemRegistrationService.registrationInPlugin(saleItemRequest);
         SaleItem saleItem = saleItemRepository.findById(saleItemId).orElse(null);
 
         assertThat(saleItem).isNotNull();

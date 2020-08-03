@@ -12,5 +12,4 @@ public class ServerRepositoryImpl extends QuerydslRepositorySupport implements S
     public ServerRepositoryImpl() {
         super(Server.class);
     }
-
 }

@@ -31,7 +31,7 @@ class SaleItemRegistrationControllerTest extends ControllerTest {
 
     @BeforeEach
     public void setUp() {
-        when(saleItemRegistrationService.registration(any(SaleItemDto.SaleItemRequest.class))).thenReturn(id);
+        when(saleItemRegistrationService.registrationInPlugin(any(SaleItemDto.SaleItemRequest.class))).thenReturn(id);
     }
 
     @Test
@@ -39,7 +39,7 @@ class SaleItemRegistrationControllerTest extends ControllerTest {
         SaleItemDto.SaleItemRequest saleItemRequest = new SaleItemDto.SaleItemRequest("uuid", "name", "description", 1, 1, "item", "image");
         String content = objectMapper.writeValueAsString(saleItemRequest);
 
-        mockMvc.perform(post("/plugin/api/v1/sale/plugin")
+        mockMvc.perform(post("/plugin/api/v1/sale")
 
                 .content(content).contentType(MediaType.APPLICATION_JSON_VALUE)
         )
