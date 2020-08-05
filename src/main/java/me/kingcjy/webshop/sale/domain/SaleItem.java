@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.kingcjy.webshop.common.jpa.MoneyConverter;
 import me.kingcjy.webshop.common.model.Money;
+import me.kingcjy.webshop.order.application.QuantityNotEnoughException;
 
 import javax.persistence.*;
 
@@ -21,6 +22,7 @@ public class SaleItem {
     @Column(name = "product_id")
     private Long id;
 
+    private Long serverId;
     private Long sellerId;
 
     @Embedded
@@ -31,10 +33,22 @@ public class SaleItem {
 
     private Integer quantity;
 
-    public SaleItem(Long sellerId, Item item, Money price, Integer quantity) {
+    @Enumerated(EnumType.STRING)
+    private SaleItemStatus status;
+
+    public SaleItem(Long serverId, Long sellerId, Item item, Money price, Integer quantity) {
+        this.serverId = serverId;
         this.sellerId = sellerId;
         this.item = item;
         this.price = price;
         this.quantity = quantity;
+        this.status = SaleItemStatus.SELLING;
+    }
+
+    public void sell(Integer quantity) {
+        if(this.quantity < quantity) {
+            throw new QuantityNotEnoughException(this.quantity, quantity, this.quantity + " 개 이하 구매가 가능합니다.");
+        }
+        this.quantity -= quantity;
     }
 }

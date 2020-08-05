@@ -24,6 +24,7 @@ public class SaleItemRegistrationService {
         Long sellerId = userRepository.findUserIdFromUUID(saleItemRequest.getUuid());
 
         SaleItem saleItem = new SaleItem(
+                saleItemRequest.getServerId(),
                 sellerId,
                 new Item(saleItemRequest.getName(), saleItemRequest.getDescription(), saleItemRequest.getImage(), saleItemRequest.getItem()),
                 new Money(saleItemRequest.getPrice()),

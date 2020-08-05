@@ -17,6 +17,8 @@ import static org.mockito.Mockito.when;
  */
 public class ControllerTest {
 
+    protected static final String X_SERVER_KEY = "X-Server-Key";
+
     @Autowired
     protected MockMvc mockMvc;
 

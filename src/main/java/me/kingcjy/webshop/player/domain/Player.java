@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.kingcjy.webshop.common.jpa.MoneyConverter;
 import me.kingcjy.webshop.common.model.Money;
+import me.kingcjy.webshop.order.application.MoneyNotEnoughException;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -69,5 +70,20 @@ public class Player {
 
     public void updateMoney(Money money) {
         this.money = money;
+    }
+
+    public void minusMoney(Money minus) {
+        if(!this.money.isGreaterThan(minus)) {
+            throw new NotEnoughMoneyException("잔액이 부족합니다.");
+        }
+
+        this.money = this.money.minus(minus);
+    }
+
+    public void buy(Money totalAmounts) {
+        if(!this.money.isGreaterThan(totalAmounts)) {
+            throw new MoneyNotEnoughException(this.money, totalAmounts, totalAmounts.minus(this.money).getValue() + " 원이 더 필요합니다.");
+        }
+        this.money = this.money.minus(totalAmounts);
     }
 }

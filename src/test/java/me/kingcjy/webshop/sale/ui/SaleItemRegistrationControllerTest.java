@@ -36,11 +36,11 @@ class SaleItemRegistrationControllerTest extends ControllerTest {
 
     @Test
     public void registrationSaleItemTest() throws Exception {
-        SaleItemDto.SaleItemRequest saleItemRequest = new SaleItemDto.SaleItemRequest("uuid", "name", "description", 1, 1, "item", "image");
+        SaleItemDto.SaleItemRequest saleItemRequest = new SaleItemDto.SaleItemRequest("uuid", "name", "description", 1, 1, "item", "image", null);
         String content = objectMapper.writeValueAsString(saleItemRequest);
 
         mockMvc.perform(post("/plugin/api/v1/sale")
-
+                .header(X_SERVER_KEY, secretKey)
                 .content(content).contentType(MediaType.APPLICATION_JSON_VALUE)
         )
                 .andExpect(status().isCreated());

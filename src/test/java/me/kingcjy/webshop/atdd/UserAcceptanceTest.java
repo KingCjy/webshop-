@@ -28,7 +28,7 @@ public class UserAcceptanceTest {
     @DisplayName("웹 회원가입 -> 서버 생성 -> 플레이어 서버접속 -> 플레이어 웹으로 정보입력")
     public void playerRegistrationTest() {
 
-//        Server Admin
+//        Server Admin and buyer
         String email = "tlssycks@hanmail.net";
         String password = "Zxcv720003!@#";
         String username = "KingCjy";
@@ -38,19 +38,16 @@ public class UserAcceptanceTest {
         String uuid2 = "82532435-c58e-4917-adba-6f45e88546f1";
         String username2 = "Seller";
 
-//        Buyer
-        String uuid3 = "82532435-c58e-4917-adba-6f45e88546f1";
-        String username3 = "Buyer";
-
         ReturnId userId = userWebSignUp(email, password, username);
         UserDto.UserToken userToken = userLogin(email, password);
         ReturnId serverId = createServer(userToken.getToken());
         String secretKey = getServerSecretKey(userToken.getToken(), serverId.getId());
 
         accessServer(secretKey, uuid2, username2);
-        ReturnId sellingItemId = sellingItem(uuid2, username);
+        ReturnId sellingItemId = sellingItem(secretKey, uuid2);
 
-
+        accessServer(secretKey, uuid, username);
+        updateMoney(secretKey, uuid, username, 10000);
     }
 
     private ReturnId userWebSignUp(String email, String password, String username) {
@@ -121,11 +118,11 @@ public class UserAcceptanceTest {
     }
 
     private ReturnId sellingItem(String secretKey, String uuid2) {
-        SaleItemDto.SaleItemRequest saleItemRequest = new SaleItemDto.SaleItemRequest(uuid2, "집행검", "짱짱쎈 집행검이다", 10, 100000, "asdjkasdad", "http://naver.com");
+        SaleItemDto.SaleItemRequest saleItemRequest = new SaleItemDto.SaleItemRequest(uuid2, "집행검", "짱짱쎈 집행검이다", 10, 100000, "asdjkasdad", "http://naver.com", null);
 
         EntityExchangeResult<Response<ReturnId>> response = client.post()
                 .uri("/plugin/api/v1/sale")
-                .header("X-ServerKey", secretKey)
+                .header("X-Server-Key", secretKey)
                 .body(Mono.just(saleItemRequest), SaleItemDto.SaleItemRequest.class)
                 .exchange()
                 .expectStatus().isCreated()
@@ -133,5 +130,18 @@ public class UserAcceptanceTest {
                 .returnResult();
 
         return response.getResponseBody().getBody();
+    }
+
+    private void updateMoney(String secretKey, String uuid, String username, int money) {
+        PlayerDto.PlayerMoneyUpdate playerMoneyUpdate = new PlayerDto.PlayerMoneyUpdate(uuid, username, money, null);
+        client.post()
+                .uri("/plugin/api/v1/players/money")
+                .header("X-Server-Key", secretKey)
+                .body(Mono.just(playerMoneyUpdate), PlayerDto.PlayerAccess.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .returnResult();
+
     }
 }
