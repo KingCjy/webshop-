@@ -1,6 +1,7 @@
 package me.kingcjy.webshop.order.application;
 
 import me.kingcjy.webshop.common.model.Money;
+import me.kingcjy.webshop.order.domain.Order;
 import me.kingcjy.webshop.order.domain.OrderRepository;
 import me.kingcjy.webshop.player.domain.Player;
 import me.kingcjy.webshop.player.domain.PlayerRepository;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -29,7 +31,7 @@ class OrderCreateServiceTest {
     @Autowired
     private OrderCreateService orderCreateService;
 
-    @MockBean
+    @Autowired
     private OrderRepository orderRepository;
 
     @MockBean
@@ -42,7 +44,7 @@ class OrderCreateServiceTest {
 
     @BeforeEach
     public void setUp() {
-        SaleItemDto.SaleItemRequest saleItemRequest = new SaleItemDto.SaleItemRequest("uuid", "name", "description", 1, 1, "item", "image", null);
+        SaleItemDto.SaleItemRequest saleItemRequest = new SaleItemDto.SaleItemRequest("uuid", "name", "description", 10, 1, "item", "image", null);
 
         this.saleItem = new SaleItem(
                 saleItemRequest.getServerId(),
@@ -63,6 +65,11 @@ class OrderCreateServiceTest {
         OrderDto.OrderRequest orderRequest = new OrderDto.OrderRequest(1L, 2, 1L);
 
         Long orderId = orderCreateService.createOrder(orderRequest);
-    }
 
+        Order order = orderRepository.findById(orderId).orElse(null);
+
+        assertThat(order).isNotNull();
+        assertThat(order.getQuantity()).isEqualTo(2);
+        assertThat(order.getTotalAmounts()).isEqualTo(new Money(2));
+    }
 }

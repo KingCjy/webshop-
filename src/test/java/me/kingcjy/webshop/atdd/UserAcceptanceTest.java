@@ -1,6 +1,7 @@
 package me.kingcjy.webshop.atdd;
 
 import me.kingcjy.webshop.common.model.ReturnId;
+import me.kingcjy.webshop.order.application.OrderDto;
 import me.kingcjy.webshop.player.application.PlayerDto;
 import me.kingcjy.webshop.sale.application.SaleItemDto;
 import me.kingcjy.webshop.server.application.ServerDto;
@@ -47,7 +48,10 @@ public class UserAcceptanceTest {
         ReturnId sellingItemId = sellingItem(secretKey, uuid2);
 
         accessServer(secretKey, uuid, username);
-        updateMoney(secretKey, uuid, username, 10000);
+        updateMoney(secretKey, uuid, username, 100000);
+        ReturnId orderId = buyItem(sellingItemId.getId(), userToken.getToken());
+
+
     }
 
     private ReturnId userWebSignUp(String email, String password, String username) {
@@ -142,6 +146,19 @@ public class UserAcceptanceTest {
                 .expectStatus().isOk()
                 .expectBody()
                 .returnResult();
+    }
 
+    private ReturnId buyItem(Long saleItemId, String token) {
+        OrderDto.OrderRequest orderRequest = new OrderDto.OrderRequest(saleItemId, 1, null);
+        EntityExchangeResult<Response<ReturnId>> response = client.post()
+                .uri("/api/v1/orders")
+                .header("X-Auth-Token", token)
+                .body(Mono.just(orderRequest), PlayerDto.PlayerAccess.class)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(new ParameterizedTypeReference<Response<ReturnId>>() {})
+                .returnResult();
+
+        return response.getResponseBody().getBody();
     }
 }

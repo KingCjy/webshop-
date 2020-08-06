@@ -22,6 +22,7 @@ public class Order {
     private Long id;
 
     private Long ordererId;
+    private Long serverId;
     private Long saleItemId;
 
     private Money totalAmounts;
@@ -31,7 +32,8 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    public Order(Long ordererId, Long saleItemId, Money price, Integer quantity) {
+    public Order(Long serverId, Long ordererId, Long saleItemId, Money price, Integer quantity) {
+        this.serverId = serverId;
         this.ordererId = ordererId;
         this.saleItemId = saleItemId;
         this.price = price;

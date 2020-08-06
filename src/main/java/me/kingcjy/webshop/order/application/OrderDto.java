@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import java.time.LocalDateTime;
 
 /**
  * @author KingCjy
@@ -25,5 +26,18 @@ public class OrderDto {
         public void setUserId(Long userId) {
             this.userId = userId;
         }
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class WaitOrder {
+        private Long orderId;
+        private String sellerUuid;
+        private String buyerUuid;
+        private Integer quantity;
+        private Integer totalAmounts;
+        private String serializedObject;
+        private LocalDateTime orderDateTime;
     }
 }
