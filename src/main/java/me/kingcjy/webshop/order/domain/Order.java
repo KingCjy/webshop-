@@ -4,8 +4,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.kingcjy.webshop.common.model.Money;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * @author KingCjy
@@ -21,8 +23,9 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    private Long ordererId;
     private Long serverId;
+    private Long sellerId;
+    private Long ordererId;
     private Long saleItemId;
 
     private Money totalAmounts;
@@ -32,13 +35,28 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    public Order(Long serverId, Long ordererId, Long saleItemId, Money price, Integer quantity) {
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    private String cause;
+
+    public Order(Long serverId, Long sellerId, Long ordererId, Long saleItemId, Money price, Integer quantity) {
         this.serverId = serverId;
+        this.sellerId = sellerId;
         this.ordererId = ordererId;
         this.saleItemId = saleItemId;
         this.price = price;
         this.quantity = quantity;
-        this.status = OrderStatus.ORDERED;
+        this.status = OrderStatus.WAIT;
         this.totalAmounts = price.multiply(quantity);
+    }
+
+    public void paymentFinish() {
+        this.status = OrderStatus.COMPLETE;
+    }
+
+    public void paymentFail(String cause) {
+        this.status = OrderStatus.REJECT;
+        this.cause = cause;
     }
 }

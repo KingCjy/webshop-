@@ -16,6 +16,8 @@ import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 /**
  * @author KingCjy
  */
@@ -51,7 +53,8 @@ public class UserAcceptanceTest {
         updateMoney(secretKey, uuid, username, 100000);
         ReturnId orderId = buyItem(sellingItemId.getId(), userToken.getToken());
 
-
+        List<OrderDto.WaitOrder> findWaitOrders = findWaitOrders(secretKey);
+        System.out.println(findWaitOrders);
     }
 
     private ReturnId userWebSignUp(String email, String password, String username) {
@@ -159,6 +162,17 @@ public class UserAcceptanceTest {
                 .expectBody(new ParameterizedTypeReference<Response<ReturnId>>() {})
                 .returnResult();
 
+        return response.getResponseBody().getBody();
+    }
+
+    private List<OrderDto.WaitOrder> findWaitOrders(String secretKey) {
+        EntityExchangeResult<Response<List<OrderDto.WaitOrder>>> response = client.get()
+                .uri("/plugin/api/v1/orders/wait")
+                .header("X-Server-Key", secretKey)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<Response<List<OrderDto.WaitOrder>>>() {})
+                .returnResult();
         return response.getResponseBody().getBody();
     }
 }

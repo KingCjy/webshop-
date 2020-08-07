@@ -72,6 +72,9 @@ public class Player {
         this.money = money;
     }
 
+    public void plusMoney(Money money) {
+        this.money = this.money.plus(money);
+    }
     public void minusMoney(Money minus) {
         if(!this.money.isGreaterThan(minus)) {
             throw new NotEnoughMoneyException("잔액이 부족합니다.");
@@ -80,10 +83,15 @@ public class Player {
         this.money = this.money.minus(minus);
     }
 
-    public void buy(Money totalAmounts) {
-        if(!this.money.isGreaterThan(totalAmounts)) {
-            throw new MoneyNotEnoughException(this.money, totalAmounts, totalAmounts.minus(this.money).getValue() + " 원이 더 필요합니다.");
+    public void sell(Money money) {
+        this.money = this.money.plus(money);
+    }
+
+    public void buy(Money money) {
+        if(!this.money.isGreaterThan(money)) {
+            throw new MoneyNotEnoughException(this.money, money, money.minus(this.money).getValue() + " 원이 더 필요합니다.");
         }
-        this.money = this.money.minus(totalAmounts);
+
+        this.money = this.money.minus(money);
     }
 }

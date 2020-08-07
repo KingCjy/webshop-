@@ -51,4 +51,8 @@ public class SaleItem {
         }
         this.quantity -= quantity;
     }
+
+    public void addQuantity(Integer quantity) {
+        this.quantity += quantity;
+    }
 }

@@ -41,7 +41,7 @@ public class OrderCreateService {
             throw new MoneyNotEnoughException(totalAmounts, buyer.getMoney(), totalAmounts.minus(buyer.getMoney()).getValue() + " 원이 더 필요합니다.");
         }
 
-        Order order = new Order(buyer.getServerId(), buyer.getId(), saleItem.getId(), saleItem.getPrice(), orderRequest.getQuantity());
+        Order order = new Order(buyer.getServerId(), saleItem.getSellerId(), buyer.getId(), saleItem.getId(), saleItem.getPrice(), orderRequest.getQuantity());
         orderRepository.save(order);
 
         saleItem.sell(orderRequest.getQuantity());

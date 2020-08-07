@@ -31,4 +31,8 @@ public class Money {
     public Money minus(Money minus) {
         return new Money(this.value - minus.value);
     }
+
+    public Money plus(Money money) {
+        return new Money(this.value + money.value);
+    }
 }

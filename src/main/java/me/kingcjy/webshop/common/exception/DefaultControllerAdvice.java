@@ -37,9 +37,4 @@ public class DefaultControllerAdvice {
     public ResponseEntity<?> handleWebException(WebException e) {
         return Response.getResponse(e.getHttpStatus(), e.getMessage());
     }
-
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<?> handleRuntimeException(RuntimeException e) {
-        return Response.badRequest(e.getMessage());
-    }
 }
