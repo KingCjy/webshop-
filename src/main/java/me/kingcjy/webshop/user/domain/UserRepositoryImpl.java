@@ -1,6 +1,5 @@
 package me.kingcjy.webshop.user.domain;
 
-import com.querydsl.core.types.OrderSpecifier;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 /**

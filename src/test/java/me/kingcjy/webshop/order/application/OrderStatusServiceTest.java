@@ -40,22 +40,25 @@ class OrderStatusServiceTest {
     @Autowired
     private ServerRepository serverRepository;
 
+    private Player seller;
+    private Player orderer;
+    private SaleItem saleItem;
 
     @BeforeEach
     public void setUp() {
-        Player seller = new Player(1L, 1L, "uuid1");
-        Player buyer = new Player(2L, 1L, "uuid2");
+        this.seller = new Player(1L, 1L, "uuid1");
+        this.orderer = new Player(2L, 1L, "uuid2");
 
         playerRepository.save(seller);
-        playerRepository.save(buyer);
+        playerRepository.save(orderer);
 
-        SaleItem saleItem = new SaleItem(1L, 1L, new Item("아이템1", "아이템 설", "이미지", "item"), new Money(1), 10);
+        this.saleItem = new SaleItem(1L, 1L, new Item("아이템1", "아이템 설", "이미지", "item"), new Money(1), 10);
         saleItemRepository.save(saleItem);
     }
 
     @Test
     public void findWaitOrdersTest() {
-        Order order = new Order(1L, 1L, 2L, 1L, new Money(10), 1);
+        Order order = new Order(1L, seller.getId(), orderer.getId(), saleItem.getId(), new Money(10), 1);
         orderRepository.save(order);
 
         List<OrderDto.WaitOrder> waitOrders = orderStatusService.findWaitOrders(1L);
@@ -64,50 +67,50 @@ class OrderStatusServiceTest {
         assertThat(waitOrders.isEmpty()).isFalse();
 
 //        Long orderId, String sellerUuid, String buyerUuid, Integer quantity, Money totalAmounts, String item, LocalDateTime orderedAt
-        assertThat(waitOrders.get(0)).isEqualTo(new OrderDto.WaitOrder(order.getId(), "uuid1", "uuid2", 1, order.getTotalAmounts(), "item", order.getCreatedAt()));
+        assertThat(waitOrders.get(0)).isEqualTo(new OrderDto.WaitOrder(order.getId(), "uuid1", "uuid2", 10, order.getTotalAmounts(), "item", order.getCreatedAt()));
     }
 
     @Test
     public void acceptOrderTest() {
-        Order order = new Order(1L, 1L, 2L, 1L, new Money(10), 1);
+        Order order = new Order(1L, seller.getId(), orderer.getId(), saleItem.getId(), new Money(10), 1);
         orderRepository.save(order);
 
-        OrderDto.AcceptOrder acceptOrder = new OrderDto.AcceptOrder(List.of(1L), 1L);
+        OrderDto.AcceptOrder acceptOrder = new OrderDto.AcceptOrder(List.of(order.getId()), 1L);
         orderStatusService.acceptOrders(acceptOrder);
 
         order = orderRepository.findById(order.getId()).orElse(null);
-        Player seller = playerRepository.findById(1L).orElse(null);
-        Player orderer = playerRepository.findById(2L).orElse(null);
+        Player seller1 = playerRepository.findById(seller.getId()).orElse(null);
+        Player orderer1 = playerRepository.findById(orderer.getId()).orElse(null);
 
         assertThat(order).isNotNull();
         assertThat(order.getStatus()).isEqualTo(OrderStatus.COMPLETE);
 
-        assertThat(seller).isNotNull();
-        assertThat(seller.getMoney()).isEqualTo(new Money(10));
+        assertThat(seller1).isNotNull();
+        assertThat(seller1.getMoney()).isEqualTo(new Money(10));
 
-        assertThat(orderer).isNotNull();
+        assertThat(orderer1).isNotNull();
     }
 
     @Test
     public void rejectOrderTest() {
-        Order order = new Order(1L, 1L, 2L, 1L, new Money(10), 1);
+        Order order = new Order(1L, seller.getId(), orderer.getId(), saleItem.getId(), new Money(10), 1);
         orderRepository.save(order);
 
-        OrderDto.RejectOrder rejectOrder = new OrderDto.RejectOrder(1L, "내맘이야", 1L);
+        OrderDto.RejectOrder rejectOrder = new OrderDto.RejectOrder(order.getId(), "내맘이야", 1L);
         orderStatusService.rejectOrders(rejectOrder);
 
         order = orderRepository.findById(order.getId()).orElse(null);
-        Player seller = playerRepository.findById(1L).orElse(null);
-        Player orderer = playerRepository.findById(2L).orElse(null);
+        Player seller1 = playerRepository.findById(seller.getId()).orElse(null);
+        Player orderer1 = playerRepository.findById(orderer.getId()).orElse(null);
 
         assertThat(order).isNotNull();
-        assertThat(order.getStatus()).isEqualTo(OrderStatus.REJECT  );
+        assertThat(order.getStatus()).isEqualTo(OrderStatus.REJECT);
         assertThat(order.getCause()).isNotEmpty();
 
-        assertThat(seller).isNotNull();
-        assertThat(seller.getMoney()).isEqualTo(new Money(0));
+        assertThat(seller1).isNotNull();
+        assertThat(seller1.getMoney()).isEqualTo(new Money(0));
 
-        assertThat(orderer).isNotNull();
-        assertThat(orderer.getMoney()).isEqualTo(new Money(10));
+        assertThat(orderer1).isNotNull();
+        assertThat(orderer1.getMoney()).isEqualTo(new Money(10));
     }
 }

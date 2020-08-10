@@ -25,14 +25,14 @@ public class OrderStatusController {
         return Response.success(waitOrders);
     }
 
-    @PatchMapping("/plugin/api/v1/orders/accept")
+    @PostMapping("/plugin/api/v1/orders/accept")
     public ResponseEntity<?> acceptOrders(@ServerId Long serverId, @RequestBody @Valid OrderDto.AcceptOrder acceptOrder) {
         acceptOrder.setServerId(serverId);
         orderStatusService.acceptOrders(acceptOrder);
         return Response.success();
     }
 
-    @PatchMapping("/plugin/api/v1/orders/reject")
+    @PostMapping("/plugin/api/v1/orders/reject")
     public ResponseEntity<?> rejectOrders(@ServerId Long serverId, @RequestBody @Valid OrderDto.RejectOrder rejectOrder) {
         rejectOrder.setServerId(serverId);
         orderStatusService.rejectOrders(rejectOrder);

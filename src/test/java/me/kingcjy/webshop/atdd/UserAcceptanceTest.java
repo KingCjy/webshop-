@@ -17,6 +17,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author KingCjy
@@ -53,8 +54,11 @@ public class UserAcceptanceTest {
         updateMoney(secretKey, uuid, username, 100000);
         ReturnId orderId = buyItem(sellingItemId.getId(), userToken.getToken());
 
-        List<OrderDto.WaitOrder> findWaitOrders = findWaitOrders(secretKey);
-        System.out.println(findWaitOrders);
+        List<OrderDto.WaitOrder> waitOrders = findWaitOrders(secretKey);
+        List<Long> orderIds = waitOrders.stream()
+                .map(waitOrder -> waitOrder.getOrderId())
+                .collect(Collectors.toList());
+        acceptOrders(secretKey, orderIds);
     }
 
     private ReturnId userWebSignUp(String email, String password, String username) {
@@ -174,5 +178,17 @@ public class UserAcceptanceTest {
                 .expectBody(new ParameterizedTypeReference<Response<List<OrderDto.WaitOrder>>>() {})
                 .returnResult();
         return response.getResponseBody().getBody();
+    }
+
+    private void acceptOrders(String secretKey, List<Long> orderIds) {
+        OrderDto.AcceptOrder acceptOrder = new OrderDto.AcceptOrder(orderIds, null);
+        EntityExchangeResult<Response<ReturnId>> response = client.post()
+                .uri("/plugin/api/v1/orders/accept")
+                .header("X-Server-Key", secretKey)
+                .body(Mono.just(acceptOrder), PlayerDto.PlayerAccess.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(new ParameterizedTypeReference<Response<ReturnId>>() {})
+                .returnResult();
     }
 }

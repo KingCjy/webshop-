@@ -29,9 +29,9 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
     @Override
     public List<OrderDto.WaitOrder> findWaitOrders(Long serverId) {
         return from(order)
-                .join(saleItem).on(order.saleItemId.eq(saleItem.id))
-                .join(seller).on(order.sellerId.eq(seller.id))
-                .join(buyer).on(order.ordererId.eq(buyer.id))
+                .innerJoin(saleItem).on(order.saleItemId.eq(saleItem.id))
+                .innerJoin(seller).on(order.sellerId.eq(seller.id))
+                .innerJoin(buyer).on(order.ordererId.eq(buyer.id))
                 .where(
                         order.serverId.eq(serverId),
                         order.status.eq(OrderStatus.WAIT)
