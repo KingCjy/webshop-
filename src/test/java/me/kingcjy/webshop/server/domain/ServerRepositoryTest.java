@@ -21,11 +21,13 @@ class ServerRepositoryTest {
     @BeforeEach
     public void setUp() {
         String name = "킹짱왕서버";
+        String description = "재밌다";
+        String bannerImage = "image";
         Version version = new Version("1.5.2");
         Address address = new Address("kingcjy.oa.to");
         SecretKey secretKey = new SecretKey(key);
 
-        Server server = new Server(name, version, address, secretKey, 1L);
+        Server server = new Server(name, description, bannerImage, version, address, secretKey, 1L);
         serverRepository.save(server);
     }
 

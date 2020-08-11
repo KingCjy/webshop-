@@ -57,4 +57,8 @@ public class User {
         this.username = username;
         this.status = UserStatus.ACTIVE;
     }
+
+    public void changeUsername(String username) {
+        this.username = username;
+    }
 }

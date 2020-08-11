@@ -16,8 +16,12 @@ public class ServerDto {
     @NoArgsConstructor
     public static class ServerRegistration {
         @NotBlank private String name;
+        @NotBlank private String description;
+        @NotNull private String bannerImage;
+
         @NotBlank private String version;
         @NotBlank private String domain;
+
 
         @Min(0)
         @Max(65565)

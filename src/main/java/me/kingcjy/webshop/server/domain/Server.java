@@ -19,6 +19,8 @@ public class Server {
     private Long id;
 
     private String name;
+    private String bannerImage;
+    private String description;
 
     @Embedded
     private Version version;
@@ -31,8 +33,10 @@ public class Server {
 
     private Long ownerId;
 
-    public Server(String name, Version version, Address address, SecretKey secretKey, Long ownerId) {
+    public Server(String name, String description, String bannerImage,  Version version, Address address, SecretKey secretKey, Long ownerId) {
         this.name = name;
+        this.description = description;
+        this.bannerImage = bannerImage;
         this.version = version;
         this.address = address;
         this.secretKey = secretKey;

@@ -11,4 +11,6 @@ public interface UserRepository extends JpaRepository<User, Long>, UserRepositor
 
     @Query("select u.id from User as u where u.mojangUser.uuid = :uuid")
     Long findUserIdFromUUID(String uuid);
+
+    User findByUsername(String username);
 }

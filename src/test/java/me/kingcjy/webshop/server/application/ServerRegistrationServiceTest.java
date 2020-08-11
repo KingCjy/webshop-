@@ -25,11 +25,13 @@ class ServerRegistrationServiceTest {
     @Test
     public void registrationServerTest() {
         String name = "킹짱왕서버";
+        String description = "재밌다!";
+        String bannerImage = "이미지";
         String version = "1.5.2";
         String domain = "kingcjy.oa.to";
         Integer port = Address.DEFAULT_SERVER_PORT;
         Long ownerId = 1L;
-        ServerDto.ServerRegistration serverRegistration = new ServerDto.ServerRegistration(name, version, domain, port, ownerId);
+        ServerDto.ServerRegistration serverRegistration = new ServerDto.ServerRegistration(name, description, bannerImage, version, domain, port, ownerId);
 
         Long id = serverRegistrationService.registration(serverRegistration);
 
@@ -37,6 +39,8 @@ class ServerRegistrationServiceTest {
 
         assertThat(server).isNotNull();
         assertThat(server.getName()).isEqualTo(name);
+        assertThat(server.getDescription()).isEqualTo(description);
+        assertThat(server.getBannerImage()).isEqualTo(bannerImage);
         assertThat(server.getVersion()).isEqualTo(new Version(version));
         assertThat(server.getAddress()).isEqualTo(new Address(domain, port));
         assertThat(server.getOwnerId()).isEqualTo(ownerId);

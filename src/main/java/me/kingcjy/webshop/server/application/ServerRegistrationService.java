@@ -21,6 +21,8 @@ public class ServerRegistrationService {
 
         Server server = new Server(
                 registration.getName(),
+                registration.getDescription(),
+                registration.getBannerImage(),
                 new Version(registration.getVersion()),
                 new Address(registration.getDomain(), registration.getPort()),
                 secretKey,

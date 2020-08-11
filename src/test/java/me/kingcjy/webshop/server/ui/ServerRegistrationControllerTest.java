@@ -32,7 +32,7 @@ class ServerRegistrationControllerTest extends ControllerTest {
 
     @Test
     public void serverRegistrationTest() throws Exception {
-        ServerDto.ServerRegistration serverRegistration = new ServerDto.ServerRegistration("최재용서버", "12.20.1", "kingcjy.oa.to", 25565, null);
+        ServerDto.ServerRegistration serverRegistration = new ServerDto.ServerRegistration("최재용서버", "재밌다", "이미지", "12.20.1", "kingcjy.oa.to", 25565, null);
         String content = objectMapper.writeValueAsString(serverRegistration);
 
         System.out.println(content);
