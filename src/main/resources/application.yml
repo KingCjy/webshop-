@@ -1,5 +1,3 @@
-
-
 webshop:
   jwt:
     auth-key: WEBSHOP_AUTH_KEY

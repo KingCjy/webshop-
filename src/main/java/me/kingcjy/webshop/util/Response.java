@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 public class Response<T> {
-    public static final String SUCCESS_MESSAGE = "success";
+    public static final String SUCCESS_MESSAGE = "ok";
 
     private Meta meta;
     private T body;
@@ -29,12 +29,12 @@ public class Response<T> {
 
     private Response() {}
 
-    private Response(HttpStatus httpStatus, String message, T body) {
+    private Response(String path, HttpStatus httpStatus, String message, T body) {
         this.meta = new Meta();
         this.meta.setStatus(httpStatus.value());
         this.meta.setMessage(message);
         this.meta.setTimestamp(LocalDateTime.now());
-        this.meta.setPath(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI());
+        this.meta.setPath(path);
 
         this.body = body;
     }
@@ -73,6 +73,10 @@ public class Response<T> {
     }
 
     public static <T> ResponseEntity<T> getResponse(HttpStatus httpStatus, String message, T body) {
-        return new ResponseEntity<T>((T)new Response<>(httpStatus, message, body), httpStatus);
+        return getResponse(((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getRequestURI(), httpStatus, message, body);
+    }
+
+    public static <T> ResponseEntity<T> getResponse(String path, HttpStatus httpStatus, String message, T body) {
+        return new ResponseEntity<T>((T)new Response<>(path, httpStatus, message, body), httpStatus);
     }
 }

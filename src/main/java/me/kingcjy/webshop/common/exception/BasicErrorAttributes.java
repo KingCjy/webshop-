@@ -36,7 +36,8 @@ public class BasicErrorAttributes extends DefaultErrorAttributes {
 
         HttpStatus httpStatus = HttpStatus.valueOf(Integer.parseInt(String.valueOf(errorAttributes.get("status"))));
         String message = (String) errorAttributes.get("message");
-        ResponseEntity<Response> response = Response.getResponse(httpStatus, message, null);
+        String path = (String) errorAttributes.get("path");
+        ResponseEntity<Response> response = Response.getResponse(path, httpStatus, message, null);
 
         Map<String, Object> map = new HashMap();
         map.put("meta", objectMapper.convertValue(response.getBody().getMeta(), Response.Meta.class));
