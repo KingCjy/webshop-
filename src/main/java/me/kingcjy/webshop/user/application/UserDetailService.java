@@ -18,7 +18,7 @@ public class UserDetailService {
 
     @Transactional(readOnly = true)
     public UserDto.UserDetail getDetail(Long userId) {
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).orElseThrow();
         return new UserDto.UserDetail(user.getEmail(), user.getUsername());
     }
 

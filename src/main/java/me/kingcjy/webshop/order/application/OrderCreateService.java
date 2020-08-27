@@ -23,7 +23,7 @@ public class OrderCreateService {
 
     @Transactional
     public Long createOrder(OrderDto.OrderRequest orderRequest) {
-        SaleItem saleItem = saleItemRepository.findById(orderRequest.getSaleItemId()).orElse(null);
+        SaleItem saleItem = saleItemRepository.findById(orderRequest.getSaleItemId()).orElseThrow();
 
         Player buyer = playerRepository.findByServerIdAndUserId(saleItem.getServerId(), orderRequest.getUserId());
 
